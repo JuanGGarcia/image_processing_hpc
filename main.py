@@ -97,7 +97,7 @@ if st.button('Choose this Filter', key="filter_selection"):
         st.write(f"Downloading images for: {search_query}")
 
         output_directory = 'processed_images'
-        num_images = 5  # Número de imágenes a descargar
+        num_images = 15  # Número de imágenes a descargar
         image_handler.clear_directory(output_directory)
         # Descargar imágenes
         with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
@@ -108,7 +108,7 @@ if st.button('Choose this Filter', key="filter_selection"):
 
         # Procesar imágenes descargadas
         all_image_paths = [os.path.join(output_directory, filename) for filename in os.listdir(output_directory) if filename.endswith(('.jpg', '.png', '.jpeg'))]
-        selected_image_paths = random.sample(all_image_paths, min(5, len(all_image_paths)))
+        selected_image_paths = random.sample(all_image_paths, min(10, len(all_image_paths)))
 
         for image_path in selected_image_paths:
             tech_class = technology_classes[selected_technology](image_path)
