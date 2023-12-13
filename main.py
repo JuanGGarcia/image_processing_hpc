@@ -5,9 +5,10 @@ from PIL import Image
 import multiprocessing
 from Filtros.Template import ImageTemplate
 from Filtros.Multiprocessing import ImageMultiprocessing
-
+from Utilities.ImageDownloader import ImageHandler
 import numpy as np
 from scipy import ndimage
+from concurrent.futures import ThreadPoolExecutor
 
 # App title and headers
 st.title("Image Processing App")
@@ -18,9 +19,11 @@ st.write('Explore different parallel computing technologies applied to image pro
 st.write(f"Number of CPU cores available: {multiprocessing.cpu_count()}")
 st.write(f"Number of threads available: {os.cpu_count() * 2}")
 
+# Search bar
+search_query = st.text_input("Search for images:")
+
 # Define technology options
 technologies = {
-    "testFilter": "Using basic python technology, processes one image at a time and show the result",
     "C": "C is a general-purpose, procedural computer programming language supporting structured programming.",
     "OpenMP": "OpenMP (Open Multi-Processing) is an API that supports multi-platform shared-memory multiprocessing programming in C, C++, and Fortran.",
     "Multiprocessing": "Multiprocessing refers to the ability of a system to support more than one processor at the same time. In Python, it's a module that allows you to create processes.",
@@ -82,28 +85,41 @@ technology_classes = {
     # "Multiprocessing": ImageMultiprocessing,  
 }
 
-# Button to confirm the selection
+# Instancia de ImageHandler
+image_handler = ImageHandler()
+
+# Botón para confirmar la selección
 if st.button('Choose this Filter', key="filter_selection"):
     st.write(f"You selected: {selected_technology}")
     st.write(technologies[selected_technology])
 
-    # Get a list of all image paths
-    all_image_paths = [os.path.join(processed_images_path, filename) for filename in os.listdir(processed_images_path) if filename.endswith(('.jpg', '.png', '.jpeg'))]
+    if search_query:
+        st.write(f"Downloading images for: {search_query}")
 
-    # Randomly select five images
-    selected_image_paths = random.sample(all_image_paths, min(5, len(all_image_paths)))
+        output_directory = 'processed_images'
+        num_images = 5  # Número de imágenes a descargar
+        image_handler.clear_directory(output_directory)
+        # Descargar imágenes
+        with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
+            future = executor.submit(image_handler.download_task, search_query, num_images, output_directory)
 
-    
+        # Espera a que se complete la descarga
+        future.result()
 
-    # Process the selected images and display the results
-    for image_path in selected_image_paths:
-        tech_class = technology_classes[selected_technology](image_path)
-        # Here we assume that the run method now expects a list of image paths
-        results = tech_class.run(selected_kernel, [image_path])  # Pass a list with a single image path
-        
+        # Procesar imágenes descargadas
+        all_image_paths = [os.path.join(output_directory, filename) for filename in os.listdir(output_directory) if filename.endswith(('.jpg', '.png', '.jpeg'))]
+        selected_image_paths = random.sample(all_image_paths, min(5, len(all_image_paths)))
 
-        for result in results:
-            st.image(result['image'], caption=f"Kernel: {result['kernel']}", use_column_width=True)
-            st.write(f"Min: {result['min_val']}, Max: {result['max_val']}, Mean: {result['mean_val']}, Std Dev: {result['std_dev']}")
-else:
-    st.write("Select a filter and a kernel, then click the button to see the results.")
+        for image_path in selected_image_paths:
+            tech_class = technology_classes[selected_technology](image_path)
+            results = tech_class.run(selected_kernel, [image_path])
+
+            for result in results:
+                col1, col2 = st.columns(2)  # Crea dos columnas
+                with col1:  # Primera columna para la imagen original
+                    st.image(Image.open(image_path), caption="Original Image", use_column_width=True)
+                with col2:  # Segunda columna para la imagen procesada
+                    st.image(result['image'], caption=f"Processed Image - Kernel: {result['kernel']}", use_column_width=True)
+                    st.write(f"Min: {result['min_val']}, Max: {result['max_val']}, Mean: {result['mean_val']}, Std Dev: {result['std_dev']}")
+    else:
+        st.write("Please enter a search query.")
