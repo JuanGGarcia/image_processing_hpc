@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
         "./Utilities"
-    ]
+    ],
+    "C_Cpp.errorSquiggles": "disabled"
 }
