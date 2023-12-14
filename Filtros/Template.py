@@ -9,7 +9,7 @@ import multiprocessing as mp
 from PIL import Image  # Import PIL for image conversion
 import time
 
-# Define a standalone function for multiprocessing
+# Función independiente para usar en multiprocessing
 def apply_kernel_standalone(kernel_data, image):
     kernel_name, kernel = kernel_data
     filtered_image = convolve2d(image, kernel, mode='same', boundary='wrap')
@@ -18,8 +18,8 @@ def apply_kernel_standalone(kernel_data, image):
 
 class ImageTemplate:
     def __init__(self, image_path):
-        self.image = imageio.imread(image_path, pilmode='L')
-        self.kernels = self.define_kernels()
+        self.image = imageio.imread(image_path, pilmode='L')# Cargar imagen inicial
+        self.kernels = self.define_kernels() # Definir kernels para filtrado
 
     def run_serial(self, image_paths):
         start_time = time.time()
@@ -47,6 +47,8 @@ class ImageTemplate:
         end_time = time.time()
         return results, end_time - start_time
 
+    # Definir los kernels para el filtrado
+    # [Código para definir cada kernel y aplicarlo a la imagen, ver el código original para detalles]
     def define_kernels(self):
         # Definir los kernels
         kernel_class_1 = np.array([[0, -1, 0], [-1, 4, -1], [0, -1, 0]])
@@ -147,6 +149,7 @@ class ImageTemplate:
     def apply_kernel_wrapper(self, kernel_data):
         return self.apply_kernel(*kernel_data)  # Pass the kernel_data argument correctly
     
+    # Método para procesar múltiples imágenes con el kernel seleccionado
     def run(self, selected_kernel_name, image_paths):
         results = []
         for image_path in image_paths:

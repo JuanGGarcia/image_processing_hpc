@@ -44,28 +44,7 @@ class ImageMPI:
         [-1, -1,  0,  1,  1],
         [-2, -1,  0,  1,  2]
         ])
-        #kernel_laplace = ndimage.laplace(self.image)  # La función de scipy para Laplace
-        #kernel_prewitt_vertical = ndimage.prewitt(self.image, axis=0)  # Prewitt vertical
-        #kernel_prewitt_horizontal = ndimage.prewitt(self.image, axis=1)  # Prewitt horizontal
 
-        # Aplicar el kernel a la imagen
-        #filtered_image_class_1 = convolve2d(self.image, kernel_class_1, mode='same', boundary='wrap')
-
-        # Calcular las estadísticas solicitadas
-        #min_val = filtered_image_class_1.min()
-        #max_val = filtered_image_class_1.max()
-        #mean_val = filtered_image_class_1.mean()
-        #std_dev = filtered_image_class_1.std()
-
-        # Mostrar las estadísticas
-        #print(f"Dimensiones: {filtered_image_class_1.shape}")
-        #print(f"Valor mínimo: {min_val}")
-        #print(f"Valor máximo: {max_val}")
-        #print(f"Valor medio: {mean_val}")
-        #print(f"Desviación estándar: {std_dev}")
-
-        # Para visualizar la imagen filtrada (opcional)
-        #plt.imshow(filtered_image_class_1, cmap='gray')
         plt.show()
 
         return {
@@ -162,6 +141,15 @@ class ImageMPI:
         if rank == 0:
             final_results = [item for sublist in gathered_results for item in sublist]
             return final_results
+
+
+
+
+
+
+
+
+
 
 
 def main():

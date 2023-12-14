@@ -1,5 +1,4 @@
 import subprocess
-import subprocess
 import streamlit as st
 import os
 import random
@@ -18,7 +17,7 @@ st.title("Image Processing App")
 st.header("Parallel Computing in Image Processing")
 st.write('Explore different parallel computing technologies applied to image processing')
 
-# Display system information
+# Muestra información del sistema como número de núcleos de CPU y hilos disponibles.
 st.write(f"Number of CPU cores available: {multiprocessing.cpu_count()}")
 st.write(f"Number of threads available: {os.cpu_count() * 2}")
 
@@ -34,7 +33,7 @@ technologies = {
     "PyCUDA": "PyCUDA lets you access Nvidia‘s CUDA parallel computation API from Python. It's useful for executing high-performance parallel computing tasks."
 }
 
-# Define kernel options
+# Define las opciones de kernels disponibles para el filtrado de imágenes.
 kernels = {
     "class_1": {
         "description": "Class 1 Edge Detection\nMatrix:\n" + str(np.array([[0, -1, 0], [-1, 4, -1], [0, -1, 0]]))
@@ -68,17 +67,16 @@ kernels = {
     }
 }
 
-# Technology selection
+# Permite al usuario seleccionar una tecnología y muestra su descripción.
 selected_technology = st.selectbox("Select a technology:", list(technologies.keys()))
 st.write(technologies[selected_technology])
 
-# Kernel selection
+# Permite al usuario seleccionar un kernel y muestra su descripción.
 selected_kernel = st.selectbox("Select a kernel:", list(kernels.keys()))
 # Display the description of the selected kernel
 st.write(kernels[selected_kernel]["description"])
 
-# Image path
-#image_path = './majors transparent.jpg'
+# Ruta a la carpeta de imágenes procesadas.
 processed_images_path = 'processed_images'
 
 # Mapping of technology names to their classes
