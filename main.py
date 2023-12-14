@@ -1,3 +1,4 @@
+import subprocess
 import streamlit as st
 import os
 import random
@@ -5,6 +6,7 @@ from PIL import Image
 import multiprocessing
 from Filtros.Template import ImageTemplate
 from Filtros.Multiprocessing import ImageMultiprocessing
+from Filtros.MPI4Py import ImageMPI
 from Utilities.ImageDownloader import ImageHandler
 import numpy as np
 from scipy import ndimage
@@ -82,7 +84,8 @@ processed_images_path = 'processed_images'
 technology_classes = {
     "Multiprocessing": ImageTemplate,
     # "OpenMP": ImageOpenMP,  # Uncomment if OpenMP is to be used
-    # "Multiprocessing": ImageMultiprocessing,  
+    # "Multiprocessing": ImageMultiprocessing,
+    "MPI4PY": lambda image_path: ImageMPI(image_path)
 }
 
 # Instancia de ImageHandler

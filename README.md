@@ -37,3 +37,10 @@ Se debe mostrar las dimensiones de la imagen luego de filtrada, valor mínimo, v
 ⦁	MPI4PY
 ⦁	PyCUDA
 """
+
+ejecutar en terminal
+python -m streamlit run main.py   
+
+
+mpi4py
+mpiexec -n 4 python tu_script.py
