@@ -1,3 +1,4 @@
+import subprocess
 import streamlit as st
 import os
 import random
@@ -81,7 +82,7 @@ processed_images_path = 'processed_images'
 # Mapping of technology names to their classes
 technology_classes = {
     "Multiprocessing": ImageTemplate,
-    # "OpenMP": ImageOpenMP,  # Uncomment if OpenMP is to be used
+    #"OpenMP": subprocess.run(['./OpenMp'], stdout=subprocess.PIPE), 
     # "Multiprocessing": ImageMultiprocessing,  
 }
 

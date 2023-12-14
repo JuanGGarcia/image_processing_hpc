@@ -1,0 +1,6 @@
+streamlit
+matplotlib
+bing-image-downloader
+numpy
+scipy
+imageio
